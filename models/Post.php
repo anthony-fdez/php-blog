@@ -48,25 +48,28 @@ class Post
 
   public function addNewPost($categoryId, $title, $body, $author)
   {
-    try {
-      if (!$categoryId) {
-        echo "helo";
-        throw new Exception("'categoryId' field is required", 400);
-      }
-
-      $query =
-        "INSERT INTO 
+    $query =
+      "INSERT INTO 
       `posts` 
       (`category_id`, `title`, `body`, `author`) 
       VALUES
       ($categoryId, \"$title\", \"$body\", \"$author\")";
 
-      $statement = $this->conn->prepare($query);
+    $statement = $this->conn->prepare($query);
 
-      $statement->execute();
+    $statement->execute();
 
-      return $statement;
-    } catch (Exception $e) {
-    }
+    return $statement;
+  }
+
+  public function getById($id)
+  {
+    $query = "SELECT * FROM `posts` WHERE `id` = $id LIMIT 1";
+
+    $statement = $this->conn->prepare($query);
+
+    $statement->execute();
+
+    return $statement;
   }
 }

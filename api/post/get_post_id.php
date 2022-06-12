@@ -7,36 +7,30 @@ header("Content-Type: application/json");
 include_once "../../models/Post.php";
 include_once "../../config/Database.php";
 
+
 try {
   if (strtoupper($_SERVER["REQUEST_METHOD"] !== "POST")) {
     throw new Exception("You should do a POST request to this endpoint");
   }
-
 
   $database = new Database();
   $db = $database->connect();
 
   $post = new Post($db);
 
-
   // get json from request
   $req = file_get_contents("php://input");
   $reqJSON = json_decode($req, true);
 
-  if (isset($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"])) {
-    $result = $post->addNewPost($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"]);
+  if (isset($reqJSON["id"])) {
+    $result = $post->getById($reqJSON["id"]);
 
-    if ($result) {
-      echo json_encode(
-        array(
-          "msg" => "Post saved"
-        )
-      );
-    } else {
-      throw new Exception("Error saving the post");
-    }
+    if (!$result) throw new Exception("Error saving the post");
+    if ($result->rowCount() < 1) throw new Exception("No post found with that id");
+
+    echo json_encode($result->fetch(PDO::FETCH_ASSOC));
   } else {
-    throw new Exception("You are missing a field");
+    throw new Exception("You need to pass 'id' field.");
   }
 } catch (Exception $e) {
   http_response_code(400);
