@@ -1,0 +1,47 @@
+<?php
+
+// Headers
+header("Acces-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+
+include_once "../../config/Database.php";
+include_once "../../models/Post.php";
+
+$database = new Database();
+$db = $database->connect();
+
+$post = new Post($db);
+
+$result = $post->readAll();
+$row_count = $result->rowCount();
+
+
+if ($row_count > 0) {
+  $posts_arr = array();
+  $posts_arr["data"] = array();
+
+  while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
+
+    $post_item = array(
+      "id" => $row["id"],
+      "title" => $row["title"],
+      "body" => $row["body"],
+      "author" => $row["author"],
+      "category_id" => $row["category_id"],
+      "category_name" => $row["category_name"],
+    );
+
+    array_push($posts_arr["data"], $post_item);
+
+    // Turn to json 
+  }
+
+
+  echo json_encode($posts_arr);
+} else {
+
+  echo json_encode(
+    array("message" => "No posts found")
+  );
+}
