@@ -4,8 +4,8 @@
 header("Acces-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-include_once "../../models/Post.php";
-include_once "../../config/Database.php";
+require_once dirname(__FILE__) . "/../../config/Database.php";
+require_once dirname(__FILE__) . "/../../models/Post.php";
 
 try {
   if (strtoupper($_SERVER["REQUEST_METHOD"] !== "POST")) {
