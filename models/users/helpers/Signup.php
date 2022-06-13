@@ -10,17 +10,15 @@ class Signup extends Users
   public function __construct($database, $email, $password)
   {
     parent::__construct($database, $email, $password);
-
-    $this->createNewUser($email, $password);
   }
 
-  private function createNewUser($email, $password)
+  public function createNewUser()
   {
-
-    $query = "INSERT INTO `users`
+    $query = "INSERT INTO 
+    `users`
     (`email`, `password`)
     VALUES
-    ($email, $password)";
+    (\"$this->email\", \"$this->password\")";
 
     $statement = $this->conn->prepare($query);
 

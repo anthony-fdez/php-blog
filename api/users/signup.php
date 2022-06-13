@@ -18,7 +18,24 @@ try {
   $database = new Database();
   $db = $database->connect();
 
-  $user = new Signup($db, "anthony", "fernanded");
+  // get json from request
+  $req = file_get_contents("php://input");
+  $reqJSON = json_decode($req, true);
+
+  if (!isset($reqJSON["email"])) {
+    echo json_encode(array("msg" => "Email is required"));
+    die;
+  }
+
+  if (!isset($reqJSON["password"])) {
+    echo json_encode(array("msg" => "Password is required"));
+    die;
+  }
+
+  $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
+  $result = $user->createNewUser();
+
+  echo json_encode(array("msg" => "User created"));
 } catch (Exception $e) {
   http_response_code(400);
   echo json_encode(
