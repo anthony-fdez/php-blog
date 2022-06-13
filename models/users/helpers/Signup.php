@@ -14,16 +14,25 @@ class Signup extends Users
 
   public function createNewUser()
   {
+    $hashedPassword = $this->hashPassword($this->password);
+
     $query = "INSERT INTO 
     `users`
     (`email`, `password`)
     VALUES
-    (\"$this->email\", \"$this->password\")";
+    (\"$this->email\", \"$hashedPassword\")";
 
     $statement = $this->conn->prepare($query);
 
     $statement->execute();
 
     return $statement;
+  }
+
+  private function hashPassword($password)
+  {
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    return $hashedPassword;
   }
 }
