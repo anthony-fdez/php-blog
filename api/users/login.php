@@ -4,10 +4,8 @@
 header("Acces-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-
 include_once "../../config/Database.php";
-include_once "../../models/users/helpers/Signup.php";
-
+include_once "../../models/users/helpers/Login.php";
 
 try {
   if (strtoupper($_SERVER["REQUEST_METHOD"] !== "POST")) {
@@ -29,14 +27,8 @@ try {
     throw new Exception("Field 'password' is required");
   }
 
-  if (strlen($reqJSON["password"]) < 8) {
-    throw new Exception("Field 'password' must be at least 8 characters long");
-  }
-
-  $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
-  $result = $user->createNewUser();
-
-  echo json_encode(array("msg" => "User created"));
+  $user = new Login($db, $reqJSON["email"], $reqJSON["password"]);
+  $user->loginUser();
 } catch (Exception $e) {
   http_response_code(400);
   echo json_encode(

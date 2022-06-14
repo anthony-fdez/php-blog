@@ -1,6 +1,5 @@
 <?php
 
-
 require_once dirname(__FILE__) . "/../Users.php";
 require_once dirname(__FILE__) . "/../../../config/Database.php";
 
