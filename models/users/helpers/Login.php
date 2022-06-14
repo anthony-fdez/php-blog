@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 require_once dirname(__FILE__) . "/../Users.php";
-require __DIR__ . '/../../../vendor/autoload.php';
+
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 
@@ -36,21 +39,7 @@ class Login extends Users
 
   private function generateJwtToken()
   {
-    $now = strtotime("now");
-    echo JWT::encode([
-      "iat" => $now, // ISSUED AT - TIME WHEN TOKEN IS GENERATED
-      "nbf" => $now, // NOT BEFORE - WHEN THIS TOKEN IS CONSIDERED VALID
-      "exp" => $now + 3600, // EXPIRY - 1 HR (3600 SECS) FROM NOW IN THIS EXAMPLE
-      "jti" => base64_encode(random_bytes(16)), // JSON TOKEN ID
-      "iss" => JWT_ISSUER, // ISSUER
-      "aud" => JWT_AUD, // AUDIENCE
-      // WHATEVER USER DATA YOU WANT TO ADD
-      "data" => [
-        "id" => $user["id"],
-        "name" => $user["name"],
-        "email" => $user["email"]
-      ]
-    ], JWT_SECRET, JWT_ALGO);
+    // i cant get the fucking autoload to work so no jwt for now
   }
 
   private function verifyPassword()
