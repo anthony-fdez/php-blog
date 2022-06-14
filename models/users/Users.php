@@ -1,5 +1,6 @@
 <?php
 
+
 class Users
 {
   // Protected so the child classes can access it
