@@ -11,7 +11,10 @@ class Auth
 
     if (!isset($headers['Authorization'])) {
       http_response_code(401);
-      echo json_encode(array("msg" => "Please log in (send 'Authorization' with a token in the headers of your request)"));
+      echo json_encode(array(
+        "msg" => "Please log in (send 'Authorization' with a token in the headers of your request)",
+        'isLoggedIn' => false
+      ));
       die;
     }
 
@@ -23,7 +26,10 @@ class Auth
   {
     if (!$this->isTokenValid()) {
       http_response_code(401);
-      echo json_encode(array("msg" => "Please log in"));
+      echo json_encode(array(
+        "msg" => "Please log in",
+        'isLoggedIn' => false
+      ));
       die;
     }
   }

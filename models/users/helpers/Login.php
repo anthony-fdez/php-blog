@@ -31,7 +31,8 @@ class Login extends Users
     $this->generateJwtToken();
 
     echo json_encode(array(
-      "msg" => "Loged in"
+      "msg" => "Successfully logged in",
+      "isLoggedIn" => true
     ));
 
     // generate JWT and sent it back
@@ -40,20 +41,5 @@ class Login extends Users
   private function generateJwtToken()
   {
     // i cant get the fucking autoload to work so no jwt for now
-  }
-
-  private function verifyPassword()
-  {
-    $query = "SELECT `password` FROM users WHERE email = \"$this->email\"";
-    $statement = $this->conn->prepare($query);
-    $statement->execute();
-
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-    if (password_verify($this->password, $result["password"])) {
-      return true;
-    }
-
-    return false;
   }
 }
