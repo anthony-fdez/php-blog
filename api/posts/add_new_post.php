@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 
 require_once dirname(__FILE__) . "/../../config/Database.php";
 require_once dirname(__FILE__) . "/../../models/posts/Post.php";
+require_once dirname(__FILE__) . "/../../middleware/Auth.php";
 
 try {
   if (strtoupper($_SERVER["REQUEST_METHOD"] !== "POST")) {
@@ -13,8 +14,10 @@ try {
   }
 
 
+
   $database = new Database();
   $db = $database->connect();
+
 
   $post = new Post($db);
 
@@ -22,6 +25,10 @@ try {
   // get json from request
   $req = file_get_contents("php://input");
   $reqJSON = json_decode($req, true);
+
+  $headers = apache_request_headers();
+  $auth = new Auth($db, $headers);
+
 
   if (isset($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"])) {
     $result = $post->addNewPost($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"]);
