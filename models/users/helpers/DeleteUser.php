@@ -22,10 +22,43 @@ class DeleteUser extends Users
       die;
     }
 
-    $query = "DELETE FROM `users` WHERE `email` = \"$this->email\"";
-    $statement = $this->conn->prepare($query);
-    $statement->execute();
+    try {
+      $query = "DELETE FROM `users` WHERE `email` = \"$this->email\"";
+      $statement = $this->conn->prepare($query);
+      $statement->execute();
 
-    return $statement;
+      $this->deleteTokens();
+
+      return $statement;
+    } catch (Exception $e) {
+      http_response_code(400);
+      echo json_encode(
+        array(
+          "debug" => "Failed to delete the user DeleteUser.php",
+          "msg" => $e->getMessage(),
+          "error_code" => $e->getCode(),
+        )
+      );
+    }
+  }
+
+  private function deleteTokens()
+  {
+    try {
+      $query = "DELETE FROM `authTokens` WHERE `email` = \"$this->email\"";
+      $statement = $this->conn->prepare($query);
+      $statement->execute();
+
+      return $statement;
+    } catch (Exception $e) {
+      http_response_code(400);
+      echo json_encode(
+        array(
+          "debug" => "Failed to delete the user tokens DeleteUser.php",
+          "msg" => $e->getMessage(),
+          "error_code" => $e->getCode(),
+        )
+      );
+    }
   }
 }

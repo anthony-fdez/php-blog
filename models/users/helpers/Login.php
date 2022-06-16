@@ -5,8 +5,6 @@ declare(strict_types=1);
 require_once dirname(__FILE__) . "/../Users.php";
 require_once dirname(__FILE__) . "/JwtHandler.php";
 
-use JwtHandler;
-
 class Login extends Users
 {
   public function __construct($database, $email, $password)

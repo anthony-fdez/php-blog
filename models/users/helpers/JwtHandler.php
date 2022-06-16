@@ -23,7 +23,9 @@ class JwtHandler
     $this->conn = $db;
 
     $this->email = $email;
-    $this->userId = $userId;
+    if (isset($userId)) {
+      $this->userId = $userId;
+    }
   }
 
   public function generateToken()
@@ -64,6 +66,46 @@ class JwtHandler
       $statement->execute();
 
       return $statement;
+    } catch (Exception $e) {
+      echo json_encode(
+        array(
+          "debug" => "Error saving token to db in JwtHandler",
+          "msg" => $e->getMessage(),
+          "error_code" => $e->getCode(),
+        )
+      );
+      die;
+    }
+  }
+
+  public function validateToken($email, $token)
+  {
+    try {
+      $query = "SELECT `token` FROM `authTokens` WHERE `email` = \"$email\"";
+
+      $statement = $this->conn->prepare($query);
+      $statement->execute();
+
+      $rowCount = $statement->rowCount();
+
+      if ($rowCount <= 0) {
+        http_response_code(401);
+        echo json_encode(array("msg" => "Please log in, access denied"));
+        die;
+      }
+
+      $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+      foreach ($result as $row) {
+        if ($row["token"] == $token) {
+          return true;
+          break;
+        }
+      }
+
+
+      return false;
     } catch (Exception $e) {
       echo json_encode(
         array(

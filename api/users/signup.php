@@ -42,7 +42,6 @@ try {
     throw new Exception("Could not create user");
   }
 
-
   $jwtHandler = new JwtHandler($db, $reqJSON["email"], $userId);
   $jwt = $jwtHandler->generateToken();
 

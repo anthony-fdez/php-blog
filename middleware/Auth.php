@@ -1,12 +1,12 @@
 <?php
 
 require_once dirname(__FILE__) . "/../models/users/helpers/JwtHandler.php";
-
-use JwtHandler;
+require_once dirname(__FILE__) . "/../config/Database.php";
 
 class Auth
 {
-  private $token; // to do 
+  private $token;
+  private $email;
 
   public function __construct($headers)
   {
@@ -19,18 +19,33 @@ class Auth
       die;
     }
 
-    $this->token = $headers['Authorization'];
+    if (!isset($headers['Email'])) {
+      http_response_code(401);
+      echo json_encode(array(
+        "msg" => "Please log in (send 'Email' with the user email in the request headers)",
+        'isLoggedIn' => false
+      ));
+      die;
+    }
+
+    $this->token = $headers["Authorization"];
+    $this->email = $headers["Email"];
+
     $this->verifyToken();
   }
 
   private function verifyToken()
   {
-    $jwtHandler = new JwtHandler();
+    $database = new Database();
+    $conn = $database->connect();
 
-    $isTokenValid = $jwtHandler->validateToken($this->token);
+    $jwtHandler = new JwtHandler($conn, $this->email, null);
+    $isTokenValid = $jwtHandler->validateToken($this->email, $this->token);
 
     if (!$isTokenValid) {
-      echo json_encode(array("msg" => "Access denied, please log in (invalid or expired JWT)"));
+      echo json_encode(array(
+        "msg" => "Access denied, please pass `Email` and `Authentication` headers to validate the user"
+      ));
       die;
     }
   }

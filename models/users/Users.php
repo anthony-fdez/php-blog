@@ -7,6 +7,7 @@ class Users
   protected $conn;
   protected $email;
   protected $password;
+  protected $dbHashedPassword;
   protected $id;
 
   public function __construct($database, $email, $password)
@@ -29,14 +30,14 @@ class Users
     }
 
     if (isset($result["password"])) {
-      $this->password = $result["password"];
+      $this->dbHashedPassword = $result["password"];
     }
 
     if (isset($result["email"])) {
       $this->email = $result["email"];
     }
 
-    if (password_verify($this->password, $result["password"])) {
+    if (password_verify($this->password, $this->dbHashedPassword)) {
       return true;
     }
 
