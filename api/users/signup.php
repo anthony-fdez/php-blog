@@ -7,6 +7,7 @@ header("Content-Type: application/json");
 
 include_once "../../config/Database.php";
 include_once "../../models/users/helpers/Signup.php";
+require_once dirname(__FILE__) . "/../../models/users/helpers/JwtHandler.php";
 
 
 try {
@@ -36,7 +37,17 @@ try {
   $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
   $result = $user->createNewUser();
 
-  echo json_encode(array("msg" => "User created"));
+  if (!$result) {
+    throw new Exception("Could not create user");
+  }
+
+  $jwtHandler = new JwtHandler();
+  $jwt = $jwtHandler->generateToken($reqJSON["email"]);
+
+  echo json_encode(array(
+    "msg" => "User created",
+    "jwt" => $jwt
+  ));
 } catch (Exception $e) {
   http_response_code(400);
   echo json_encode(

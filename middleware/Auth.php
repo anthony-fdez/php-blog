@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . "/../models/users/helpers/JwtHandler.php";
+
 class Auth
 {
   private $db;
@@ -24,20 +26,13 @@ class Auth
 
   public function verifyToek()
   {
-    if (!$this->isTokenValid()) {
-      http_response_code(401);
-      echo json_encode(array(
-        "msg" => "Please log in",
-        'isLoggedIn' => false
-      ));
+    $jwtHandler = new JwtHandler();
+
+    $isTokenValid = $jwtHandler->validateToken($this->token);
+
+    if (!$isTokenValid) {
+      echo json_encode(array("msg" => "Access denied, please log in (invalid or expired JWT)"));
       die;
     }
-  }
-
-  private function isTokenValid()
-  {
-    // do the token validation
-
-    return true;
   }
 }

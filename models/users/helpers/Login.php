@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 require_once dirname(__FILE__) . "/../Users.php";
-
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
-use Firebase\JWT\JWT;
+require_once dirname(__FILE__) . "/JwtHandler.php";
 
 class Login extends Users
 {
@@ -27,19 +24,13 @@ class Login extends Users
       return;
     }
 
-
-    $this->generateJwtToken();
+    $jwtHandler = new JwtHandler();
+    $jwt = $jwtHandler->generateToken($this->email);
 
     echo json_encode(array(
       "msg" => "Successfully logged in",
-      "isLoggedIn" => true
+      "isLoggedIn" => true,
+      "jwt" => $jwt
     ));
-
-    // generate JWT and sent it back
-  }
-
-  private function generateJwtToken()
-  {
-    // i cant get the fucking autoload to work so no jwt for now
   }
 }
