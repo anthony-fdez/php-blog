@@ -36,17 +36,20 @@ try {
 
   $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
   $result = $user->createNewUser();
+  $userId = $db->lastInsertId();
 
   if (!$result) {
     throw new Exception("Could not create user");
   }
 
-  $jwtHandler = new JwtHandler();
-  $jwt = $jwtHandler->generateToken($reqJSON["email"]);
+
+  $jwtHandler = new JwtHandler($db, $reqJSON["email"], $userId);
+  $jwt = $jwtHandler->generateToken();
 
   echo json_encode(array(
     "msg" => "User created",
-    "jwt" => $jwt
+    "jwt" => $jwt,
+    "userId" => $userId
   ));
 } catch (Exception $e) {
   http_response_code(400);

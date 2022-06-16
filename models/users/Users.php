@@ -6,7 +6,8 @@ class Users
   // Protected so the child classes can access it
   protected $conn;
   protected $email;
-  protected  $password;
+  protected $password;
+  protected $id;
 
   public function __construct($database, $email, $password)
   {
@@ -17,11 +18,23 @@ class Users
 
   protected function verifyPassword()
   {
-    $query = "SELECT `password` FROM users WHERE email = \"$this->email\"";
+    $query = "SELECT `password`, `id`, `email` FROM users WHERE email = \"$this->email\"";
     $statement = $this->conn->prepare($query);
     $statement->execute();
 
     $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if (isset($result["id"])) {
+      $this->id = $result["id"];
+    }
+
+    if (isset($result["password"])) {
+      $this->password = $result["password"];
+    }
+
+    if (isset($result["email"])) {
+      $this->email = $result["email"];
+    }
 
     if (password_verify($this->password, $result["password"])) {
       return true;

@@ -2,6 +2,8 @@
 
 require_once dirname(__FILE__) . "/../models/users/helpers/JwtHandler.php";
 
+use JwtHandler;
+
 class Auth
 {
   private $token; // to do 
