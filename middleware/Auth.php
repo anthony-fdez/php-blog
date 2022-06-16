@@ -4,13 +4,10 @@ require_once dirname(__FILE__) . "/../models/users/helpers/JwtHandler.php";
 
 class Auth
 {
-  private $db;
   private $token; // to do 
 
-  public function __construct($db, $headers)
+  public function __construct($headers)
   {
-    $this->db = $db;
-
     if (!isset($headers['Authorization'])) {
       http_response_code(401);
       echo json_encode(array(
@@ -21,10 +18,10 @@ class Auth
     }
 
     $this->token = $headers['Authorization'];
-    $this->verifyToek();
+    $this->verifyToken();
   }
 
-  public function verifyToek()
+  private function verifyToken()
   {
     $jwtHandler = new JwtHandler();
 

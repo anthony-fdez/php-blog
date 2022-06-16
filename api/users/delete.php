@@ -21,7 +21,7 @@ try {
   $reqJSON = json_decode($req, true);
 
   $headers = apache_request_headers();
-  $auth = new Auth($db, $headers);
+  $auth = new Auth($headers);
 
   if (!isset($reqJSON["email"])) {
     throw new Exception("Field 'email' is required");
