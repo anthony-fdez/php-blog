@@ -19,9 +19,9 @@ class Users
 
   protected function verifyPassword()
   {
-    $query = "SELECT `password`, `id`, `email` FROM users WHERE email = \"$this->email\"";
+    $query = "SELECT `password`, `id`, `email` FROM users WHERE email = :email";
     $statement = $this->conn->prepare($query);
-    $statement->execute();
+    $statement->execute(["email" => $this->email]);
 
     $result = $statement->fetch(PDO::FETCH_ASSOC);
 

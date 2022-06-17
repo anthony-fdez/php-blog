@@ -60,10 +60,10 @@ class JwtHandler
   private function saveTokenToDb($jwt, $email, $id)
   {
     try {
-      $query = "INSERT INTO `authTokens` (`email`, `token`, `userId`) VALUES (\"$email\", \"$jwt\", $id)";
+      $query = "INSERT INTO `authTokens` (`email`, `token`, `userId`) VALUES (:email, :jwt, :id)";
 
       $statement = $this->conn->prepare($query);
-      $statement->execute();
+      $statement->execute(["email" => $email, "jwt" => $jwt, "id" => $id]);
 
       return $statement;
     } catch (Exception $e) {
@@ -81,10 +81,10 @@ class JwtHandler
   public function validateToken($email, $token)
   {
     try {
-      $query = "SELECT `token` FROM `authTokens` WHERE `email` = \"$email\"";
+      $query = "SELECT `token` FROM `authTokens` WHERE `email` = :email";
 
       $statement = $this->conn->prepare($query);
-      $statement->execute();
+      $statement->execute(["email" => $email]);
 
       $rowCount = $statement->rowCount();
 

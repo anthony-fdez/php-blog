@@ -19,20 +19,16 @@ class Signup extends Users
     `users`
     (`email`, `password`)
     VALUES
-    (\"$this->email\", \"$hashedPassword\")";
+    (:email, :password)";
 
     $statement = $this->conn->prepare($query);
-
-    $statement->execute();
+    $statement->execute(["email" => $this->email, "password" => $hashedPassword]);
 
     return $statement;
   }
 
   private function hashPassword($password)
   {
-    // To verify hashed password
-    // password_verify($password, $hashed_password))
-
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     return $hashedPassword;

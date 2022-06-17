@@ -53,22 +53,22 @@ class Post
       `posts` 
       (`category_id`, `title`, `body`, `author`) 
       VALUES
-      ($categoryId, \"$title\", \"$body\", \"$author\")";
+      (:categoryId, :title, :body, :author)";
 
     $statement = $this->conn->prepare($query);
 
-    $statement->execute();
+    $statement->execute(["categoryId" => $categoryId, "title" => $title, "body" => $body, "author" => $author]);
 
     return $statement;
   }
 
   public function getById($id)
   {
-    $query = "SELECT * FROM `posts` WHERE `id` = $id LIMIT 1";
+    $query = "SELECT * FROM `posts` WHERE `id` = :id LIMIT 1";
 
     $statement = $this->conn->prepare($query);
 
-    $statement->execute();
+    $statement->execute(["id" => $id]);
 
     return $statement;
   }

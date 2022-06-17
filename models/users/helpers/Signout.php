@@ -17,9 +17,9 @@ class Signout extends Users
   public function signOutUser($jwt)
   {
     try {
-      $query = "DELETE FROM `authTokens` WHERE `token` = \"$jwt\"";
+      $query = "DELETE FROM `authTokens` WHERE `token` = :jwt";
       $statement = $this->conn->prepare($query);
-      $result = $statement->execute();
+      $result = $statement->execute(["jwt" => $jwt]);
 
       if (!$result) {
         throw new Exception("Could not delete token from the database");
@@ -48,9 +48,9 @@ class Signout extends Users
     // Find every row with their email and remove it in the authTokens table
 
     try {
-      $query = "DELETE FROM `authTokens` WHERE `email` = \"$email\"";
+      $query = "DELETE FROM `authTokens` WHERE `email` = :email";
       $statement = $this->conn->prepare($query);
-      $result = $statement->execute();
+      $result = $statement->execute(["email" => $email]);
 
       if (!$result) {
         throw new Exception("Could not delete all tokens from the database");

@@ -23,9 +23,9 @@ class DeleteUser extends Users
     }
 
     try {
-      $query = "DELETE FROM `users` WHERE `email` = \"$this->email\"";
+      $query = "DELETE FROM `users` WHERE `email` = :email";
       $statement = $this->conn->prepare($query);
-      $statement->execute();
+      $statement->execute(["email" => $this->email]);
 
       $this->deleteTokens();
 
@@ -45,9 +45,9 @@ class DeleteUser extends Users
   private function deleteTokens()
   {
     try {
-      $query = "DELETE FROM `authTokens` WHERE `email` = \"$this->email\"";
+      $query = "DELETE FROM `authTokens` WHERE `email` = :email";
       $statement = $this->conn->prepare($query);
-      $statement->execute();
+      $statement->execute(["email" => $this->email]);
 
       return $statement;
     } catch (Exception $e) {
