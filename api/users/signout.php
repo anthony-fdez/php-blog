@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 
 include_once dirname(__FILE__) . "/../../config/Database.php";
 include_once dirname(__FILE__) . "/../../middleware/Auth.php";
+include_once dirname(__FILE__) . "/../../models/users/helpers/Signout.php";
 
 
 try {
@@ -22,6 +23,9 @@ try {
 
   $headers = apache_request_headers();
   $auth = new Auth($headers);
+
+  $signOut = new Signout($db);
+  $signOut->signOutUser($headers["Authorization"]);
 } catch (Exception $e) {
   http_response_code(400);
   echo json_encode(
