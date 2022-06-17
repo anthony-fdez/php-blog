@@ -8,6 +8,8 @@ To run this project locally you need to download XAMPP to be able to run the loc
 
 After you have XAMPP installed import the database from dbTemplate.sql in the root of the project.
 
+When you have the project locally you need to run `composer install` in your terminal to install the dependencies (which is only php/jwt)
+
 ## Api Docs
 
 There are protected api routes that the user needs to be logged in to access, for those you always need to pass a JSON Web Token generated after creating the user or logging in, and also the email of the user. This are passed in the header of the POST request
