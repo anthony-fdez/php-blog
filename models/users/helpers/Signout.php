@@ -42,4 +42,35 @@ class Signout extends Users
       );
     }
   }
+
+  public function signOutAll($email)
+  {
+    // Find every row with their email and remove it in the authTokens table
+
+    try {
+      $query = "DELETE FROM `authTokens` WHERE `email` = \"$email\"";
+      $statement = $this->conn->prepare($query);
+      $result = $statement->execute();
+
+      if (!$result) {
+        throw new Exception("Could not delete all tokens from the database");
+      }
+
+      echo json_encode(array(
+        "msg" => "Logged out on all devices successfully",
+        "isLoggedIn" => false
+      ));
+
+      die;
+    } catch (Exception $e) {
+      http_response_code(400);
+      echo json_encode(
+        array(
+          "debug" => "Failed to sign out the user Signout.php",
+          "msg" => $e->getMessage(),
+          "error_code" => $e->getCode(),
+        )
+      );
+    }
+  }
 }
