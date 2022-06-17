@@ -31,6 +31,10 @@ try {
     throw new Exception("Field 'password' is required");
   }
 
+  if (!filter_var($reqJSON["email"], FILTER_VALIDATE_EMAIL)) {
+    throw new Exception("Invalid email address");
+  }
+
   $deleteUser = new DeleteUser($db, $reqJSON["email"], $reqJSON["password"]);
   $queryResult = $deleteUser->delete();
 

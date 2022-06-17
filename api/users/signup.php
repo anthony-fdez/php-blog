@@ -34,6 +34,10 @@ try {
     throw new Exception("Field 'password' must be at least 8 characters long");
   }
 
+  if (!filter_var($reqJSON["email"], FILTER_VALIDATE_EMAIL)) {
+    throw new Exception("Invalid email address");
+  }
+
   $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
   $result = $user->createNewUser();
   $userId = $db->lastInsertId();

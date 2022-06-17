@@ -28,6 +28,10 @@ try {
     throw new Exception("Field 'password' is required");
   }
 
+  if (!filter_var($reqJSON["email"], FILTER_VALIDATE_EMAIL)) {
+    throw new Exception("Invalid email address");
+  }
+
   $user = new Login($db, $reqJSON["email"], $reqJSON["password"]);
   $user->loginUser();
 } catch (Exception $e) {

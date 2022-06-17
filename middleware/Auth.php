@@ -28,6 +28,10 @@ class Auth
       die;
     }
 
+    if (!filter_var($headers["Email"], FILTER_VALIDATE_EMAIL)) {
+      throw new Exception("Invalid 'Email' sent with the header of the request");
+    }
+
     $this->token = $headers["Authorization"];
     $this->email = $headers["Email"];
 
