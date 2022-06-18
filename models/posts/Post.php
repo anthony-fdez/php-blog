@@ -47,7 +47,14 @@ class Post
 
   public function getById($id)
   {
-    $query = "SELECT * FROM `posts` WHERE `id` = :id LIMIT 1";
+    $query = "SELECT 
+    p.*,
+    COUNT(l.userId) as likes 
+    FROM `posts` p
+    LEFT JOIN `likes` l
+    ON l.postId = p.id
+    WHERE p.id = :id 
+    LIMIT 1";
 
     $statement = $this->conn->prepare($query);
 
