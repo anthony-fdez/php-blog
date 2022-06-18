@@ -7,14 +7,16 @@ class Users
   protected $conn;
   protected $email;
   protected $password;
+  protected $name;
   protected $dbHashedPassword;
   protected $id;
 
-  public function __construct($database, $email, $password)
+  public function __construct($database, $email, $password, $name)
   {
     $this->conn = $database;
     $this->email = $email;
     $this->password = $password;
+    $this->name = $name;
   }
 
   protected function verifyPassword()

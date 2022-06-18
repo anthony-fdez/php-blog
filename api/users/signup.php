@@ -26,6 +26,10 @@ try {
     throw new Exception("Field 'email' is required");
   }
 
+  if (!isset($reqJSON["name"])) {
+    throw new Exception("Field 'name' is required");
+  }
+
   if (!isset($reqJSON["password"])) {
     throw new Exception("Field 'password' is required");
   }
@@ -38,7 +42,7 @@ try {
     throw new Exception("Invalid email address");
   }
 
-  $user = new Signup($db, $reqJSON["email"], $reqJSON["password"]);
+  $user = new Signup($db, $reqJSON["email"], $reqJSON["password"], $reqJSON["name"]);
   $result = $user->createNewUser();
   $userId = $db->lastInsertId();
 

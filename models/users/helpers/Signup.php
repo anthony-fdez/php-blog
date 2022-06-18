@@ -6,9 +6,9 @@ require_once dirname(__FILE__) . "/../../../config/Database.php";
 
 class Signup extends Users
 {
-  public function __construct($database, $email, $password)
+  public function __construct($database, $email, $password, $name)
   {
-    parent::__construct($database, $email, $password);
+    parent::__construct($database, $email, $password, $name);
   }
 
   public function createNewUser()
@@ -17,12 +17,12 @@ class Signup extends Users
 
     $query = "INSERT INTO 
     `users`
-    (`email`, `password`)
+    (`email`, `password`, `name`)
     VALUES
-    (:email, :password)";
+    (:email, :password, :name)";
 
     $statement = $this->conn->prepare($query);
-    $statement->execute(["email" => $this->email, "password" => $hashedPassword]);
+    $statement->execute(["email" => $this->email, "password" => $hashedPassword, "name" => $this->name]);
 
     return $statement;
   }
