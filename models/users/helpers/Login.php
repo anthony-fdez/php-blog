@@ -9,7 +9,7 @@ class Login extends Users
 {
   public function __construct($database, $email, $password)
   {
-    parent::__construct($database, $email, $password);
+    parent::__construct($database, $email, $password, null);
   }
 
   public function loginUser()

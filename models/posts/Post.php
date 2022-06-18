@@ -2,17 +2,7 @@
 
 class Post
 {
-  private $conn;
-  private $table = "posts";
-
-  // Post properties
-  public $postId;
-  public $categoryId;
-  public $categoryName;
-  public $title;
-  public $body;
-  public $author;
-  public $createdAt;
+  protected $conn;
 
   // Constructor
   public function __construct($database)

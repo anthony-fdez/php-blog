@@ -26,7 +26,7 @@ if ($row_count > 0) {
       "title" => $row["title"],
       "body" => $row["body"],
       "author" => $row["author"],
-      "category_name" => $row["category_name"],
+      "created_at" => $row["created_at"]
     );
 
     array_push($posts_arr["data"], $post_item);

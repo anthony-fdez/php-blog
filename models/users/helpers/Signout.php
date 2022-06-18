@@ -10,7 +10,7 @@ class Signout extends Users
     // No need to use the email or passwords
     // since i'll just delete the token 
     // and they need to be loged in to be able to log out...
-    parent::__construct($database, null, null);
+    parent::__construct($database, null, null, null);
   }
 
   // To sign out a user i only need to delete the token they send from the db
