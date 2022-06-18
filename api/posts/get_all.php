@@ -21,14 +21,11 @@ if ($row_count > 0) {
   $posts_arr["data"] = array();
 
   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
-
     $post_item = array(
       "id" => $row["id"],
       "title" => $row["title"],
       "body" => $row["body"],
       "author" => $row["author"],
-      "category_id" => $row["category_id"],
       "category_name" => $row["category_name"],
     );
 

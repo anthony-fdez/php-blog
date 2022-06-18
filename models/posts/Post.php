@@ -25,19 +25,7 @@ class Post
     // Create querry
 
     $query =
-      "SELECT
-        c.name as category_name,
-        p.id,
-        p.category_id,
-        p.title,
-        p.body,
-        p.author,
-        p.created_at
-      FROM " . $this->table . " p
-      LEFT JOIN 
-        categories c ON p.category_ID = c.id
-      ORDER BY
-        p.created_at DESC";
+      "SELECT * FROM `posts`";
 
     $statement  = $this->conn->prepare($query);
 
@@ -46,18 +34,18 @@ class Post
     return $statement;
   }
 
-  public function addNewPost($categoryId, $title, $body, $author)
+  public function addNewPost($title, $body, $author)
   {
     $query =
       "INSERT INTO 
       `posts` 
-      (`category_id`, `title`, `body`, `author`) 
+      (`title`, `body`, `author`) 
       VALUES
-      (:categoryId, :title, :body, :author)";
+      (:title, :body, :author)";
 
     $statement = $this->conn->prepare($query);
 
-    $statement->execute(["categoryId" => $categoryId, "title" => $title, "body" => $body, "author" => $author]);
+    $statement->execute(["title" => $title, "body" => $body, "author" => $author]);
 
     return $statement;
   }

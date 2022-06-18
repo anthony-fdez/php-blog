@@ -13,25 +13,21 @@ try {
     throw new Exception("You should do a POST request to this endpoint");
   }
 
-
-
   $database = new Database();
   $db = $database->connect();
 
-
   $post = new Post($db);
-
 
   // get json from request
   $req = file_get_contents("php://input");
   $reqJSON = json_decode($req, true);
 
   $headers = apache_request_headers();
-  $auth = new Auth($db, $headers);
+  $auth = new Auth($headers);
 
 
-  if (isset($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"])) {
-    $result = $post->addNewPost($reqJSON["categoryId"], $reqJSON["title"], $reqJSON["body"], $reqJSON["author"]);
+  if (isset($reqJSON["title"], $reqJSON["body"])) {
+    $result = $post->addNewPost($reqJSON["title"], $reqJSON["body"], $auth->email);
 
     if ($result) {
       echo json_encode(

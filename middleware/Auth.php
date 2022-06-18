@@ -6,7 +6,9 @@ require_once dirname(__FILE__) . "/../config/Database.php";
 class Auth
 {
   private $token;
-  private $email;
+  public $email;
+  public $id;
+  public $name;
 
   public function __construct($headers)
   {
@@ -38,6 +40,8 @@ class Auth
     $this->verifyToken();
   }
 
+
+
   private function verifyToken()
   {
     $database = new Database();
@@ -51,6 +55,24 @@ class Auth
         "msg" => "Access denied, please pass `Email` and `Authentication` headers to validate the user"
       ));
       die;
+    }
+
+    $this->getUserInfo($conn);
+  }
+
+  private function getUserInfo($conn)
+  {
+    $query = "SELECT `id`, `email`, `name` FROM `users` WHERE `email` = :email";
+    $statement = $conn->prepare($query);
+
+    $statement->execute(["email" => $this->email]);
+
+    $userData = $statement->fetch(PDO::FETCH_ASSOC);
+
+
+    if ($userData) {
+      $this->name = $userData["name"];
+      $this->id = $userData["id"];
     }
   }
 }
