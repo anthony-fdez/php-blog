@@ -15,7 +15,12 @@ class Post
     // Create querry
 
     $query =
-      "SELECT * FROM `posts`";
+      "SELECT 
+      p.*, 
+      COUNT(l.userId) as likes 
+      FROM posts p 
+      LEFT JOIN likes l 
+      ON l.postId = p.id GROUP BY p.id";
 
     $statement  = $this->conn->prepare($query);
 
