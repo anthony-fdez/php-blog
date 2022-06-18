@@ -16,6 +16,12 @@ class LikeUnlike extends Post
 
   public function likeUnlike()
   {
+    if ($this->postExists() == false) {
+      http_response_code(400);
+      echo json_encode(array("status" => "error", "msg" => "Post with specified id does not exist"));
+      die;
+    }
+
     if ($this->isPostLikedAlready()) {
       $this->unlike();
       die;
@@ -67,5 +73,21 @@ class LikeUnlike extends Post
     }
 
     echo json_encode(array("status" => "OK", "msg" => "Post unliked"));
+  }
+
+  private function postExists()
+  {
+    $query = "SELECT * FROM `posts` WHERE
+    `id` = :postId";
+
+    $statement = $this->conn->prepare($query);
+    $statement->execute(["postId" => $this->postId]);
+
+
+    if ($statement->rowCount() >= 1) {
+      return true;
+    }
+
+    return false;
   }
 }
