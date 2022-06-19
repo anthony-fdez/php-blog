@@ -49,7 +49,7 @@ class Post
   {
     $query = "SELECT 
     p.*,
-    COUNT(l.userId) as likes 
+    COUNT(l.userId) as likes
     FROM `posts` p
     LEFT JOIN `likes` l
     ON l.postId = p.id
